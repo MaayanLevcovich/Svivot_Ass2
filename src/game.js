@@ -86,22 +86,32 @@ function Game() {
 
   // Spawn a new wave of enemies
   this.spawnWave = function() {
-    var height = imageRepository.enemy.height;
-    var width = imageRepository.enemy.width;
-    var initialX = 135;
-    var x = initialX;
-    var y = 30;
-    var spacer = -height * 1.5;
     var numOfShips = 20;
     var numOfCols = 5;
     var initialSpeed = 2;
+    var height = imageRepository.enemy.height;
+    var width = imageRepository.enemy.width;
+    var initialX = 130;
+    var x = initialX;
+    var y = 30;
+    var spacer = -height * 1.5;
+    var score = 20;
+    var colorDelta = 0;
 
     for (var i = 1; i <= numOfShips; i++) {
-      this.enemyPool.get(x,y,initialSpeed);
+      var enemy = this.enemyPool.get(x,y,initialSpeed);
+
+      if (enemy) {
+        enemy.score = score;
+        enemy.colorDelta = colorDelta;
+      }
+
       x += width + 25;
       if (i % numOfCols == 0) {
         x = initialX;
-        y -= spacer
+        y -= spacer;
+        score -= 5;
+        colorDelta += 30;
       }
     }
   };

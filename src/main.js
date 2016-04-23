@@ -30,6 +30,14 @@ function animate() {
   document.getElementById('score').innerHTML = game.playerScore;
   document.getElementById('lives').innerHTML = game.ship.lives;
 
+  var enemy = game.enemyPool.getPool()[0];
+
+  if (enemy) {
+    document.getElementById('enemyTopSpeed').innerHTML = enemy.topSpeed;
+    document.getElementById('enemySpeed').innerHTML = enemy.speed;
+  }
+
+
   // Insert objects into quadtree
   game.quadTree.clear();
   game.quadTree.insert(game.ship);

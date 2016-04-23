@@ -14,14 +14,18 @@ function Enemy() {
     this.x = x;
     this.y = y;
     this.speed = speed;
+    this.topSpeed = speed + SPEED_INCREASE_FACTOR * 4;
+    this.fireSpeed = -speed;
+    this.topFireSpeed = this.fireSpeed - FIRE_SPEED_INCREASE_FACTOR * 4;
     this.speedX = speed;
     this.speedY = 0;
     this.alive = true;
     this.leftEdge = this.x - 130;
-    this.rightEdge = this.x + 130;
+    this.rightEdge = this.x + 220;
+    this.score = 0;
+    this.colorDelta = 0;
 
-    var self = this;
-    this.speedTimerHandle = setTimeout(function() { self.speedX = (self.speedX * 2) % 8 }, 5000);
+    this.speedIntervalHandle = setInterval(this.increaseSpeed, 5000);
   };
 
   /*
@@ -29,17 +33,22 @@ function Enemy() {
    */
   this.draw = function() {
     this.context.clearRect(this.x-1, this.y, this.width+1, this.height);
+
     this.x += this.speedX;
     this.y += this.speedY;
+
     if (this.x <= this.leftEdge) {
       this.speedX = this.speed;
     }
-    else if (this.x >= this.rightEdge + this.width) {
+    else if (this.x + this.width >= this.rightEdge) {
       this.speedX = -this.speed;
     }
 
     if (!this.isColliding) {
       this.context.drawImage(imageRepository.enemy, this.x, this.y);
+
+      var imageData = this.context.getImageData(this.x, this.y, this.width, this.height);
+      this.addColorDelta(imageData);
       
       if (this.shouldFire && this.canFire()) {
         this.fire();
@@ -48,7 +57,7 @@ function Enemy() {
       return false;
     }
     else {
-      game.playerScore += 10;
+      game.playerScore += this.score;
       game.explosion.get();
       return true;
     }
@@ -58,7 +67,7 @@ function Enemy() {
    * Fires a bullet
    */
   this.fire = function() {
-    game.enemyBulletPool.get(this.x+this.width/2, this.y+this.height, -2.5);
+    game.enemyBulletPool.get(this.x+this.width/2, this.y+this.height, this.fireSpeed);
   };
 
   var lowerBound = this.canvasHeight * 0.75;
@@ -78,6 +87,35 @@ function Enemy() {
     this.speedY = 0;
     this.alive = false;
     this.isColliding = false;
+
+    clearInterval(this.speedIntervalHandle);
+  };
+
+  var self = this;
+  this.increaseSpeed = function() {
+    var newSpeed = self.speed + SPEED_INCREASE_FACTOR;
+
+    self.speed = newSpeed >= self.topSpeed ? self.topSpeed : newSpeed;
+    self.speedX = self.speedX > 0 ? self.speed : -self.speed;
+
+    var newFireSpeed = self.fireSpeed - FIRE_SPEED_INCREASE_FACTOR;
+    self.fireSpeed =  newFireSpeed >= self.topFireSpeed ? self.topFireSpeed : newFireSpeed;
+  };
+
+  /**
+   * Adds delta to rgb data of the image
+   * @param imageData
+   */
+  this.addColorDelta = function (imageData) {
+    var data = imageData.data;
+
+    for (var i = 0; i < data.length; i += 4) {
+      data[i] += this.colorDelta;
+      data[i + 1] += this.colorDelta;
+      data[i + 2] += this.colorDelta;
+    }
+
+    this.context.putImageData(imageData, this.x, this.y)
   };
 }
 Enemy.prototype = new Drawable();

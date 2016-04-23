@@ -51,9 +51,9 @@ function Pool(maxSize) {
     }
     else if (object == "enemy") {
       for (var i = 0; i < size; i++) {
+        
         var enemy = new Enemy();
-        enemy.init(0,0, imageRepository.enemy.width,
-          imageRepository.enemy.height);
+        enemy.init(0,0, imageRepository.enemy.width, imageRepository.enemy.height);
         pool[i] = enemy;
       }
     }
@@ -76,7 +76,11 @@ function Pool(maxSize) {
   this.get = function(x, y, speed) {
     if(!pool[size - 1].alive) {
       pool[size - 1].spawn(x, y, speed);
-      pool.unshift(pool.pop());
+
+      var spawnedObject = pool.pop();
+      pool.unshift(spawnedObject);
+
+      return spawnedObject;
     }
   };
 
