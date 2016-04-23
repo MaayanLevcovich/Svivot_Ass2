@@ -92,18 +92,10 @@ function Game() {
       this.backgroundAudio.load();
 
       this.checkAudio = window.setInterval(function(){checkReadyState()},1000);
+
       this.time = INITIAL_TIME;
-
-      var self = this;
-      var timerDiv = document.getElementById('timer');
-      this.timer = window.setInterval(function () {
-        timerDiv.innerHTML = self.time;
-        self.time -= 1;
-
-        if (self.time < 0) {
-          self.gameOver();
-        }
-      }, 1000)
+      this.timerDiv = document.getElementById('timer');
+      this.timer = window.setInterval(this.timerLoop, 1000)
     }
   };
 
@@ -140,11 +132,20 @@ function Game() {
   };
 
   var self = this;
-  this.dropSpecialAbility = function () {
+  this.dropSpecialAbility = function() {
     var y = 0;
     var x = Math.floor(Math.random() * (self.mainCanvas.width + 1));
     var speed = -2.5;
     self.specialAbilityPool.get(x, y, speed);
+  };
+
+  this.timerLoop = function() {
+    self.timerDiv.innerHTML = self.time;
+    self.time -= 1;
+
+    if (self.time < 0) {
+      self.gameOver();
+    }
   };
 
   // Start the animation loop
@@ -173,6 +174,9 @@ function Game() {
     this.specialAbilityPool.init("specialAbility");
 
     this.specialAbilityHandle = setInterval(this.dropSpecialAbility, 5000);
+
+    this.time = INITIAL_TIME;
+    this.timer = setInterval(this.timerLoop, 1000);
 
     this.playerScore = 0;
     this.ship.lives = PLAYER_LIVES;

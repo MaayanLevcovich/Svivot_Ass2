@@ -29,7 +29,7 @@ canvas {
 .game-state {
     position: absolute;
     top: 5px;
-    left: 400px;
+    left: 200px;
     color: #FF7F00;
     font-family: Helvetica, sans-serif;
     cursor: default;
