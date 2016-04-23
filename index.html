@@ -1,7 +1,69 @@
 <!DOCTYPE html>
 <html>
-<script type="application/javascript" src="src/main.js"></script>
-<body>
-</body>
+<head>
+  <script type="application/javascript" src="src/game.js"></script>
 
+  <script type="application/javascript" src="src/assets/image-repository.js"></script>
+
+  <script type="application/javascript" src="src/drawables/drawable.js"></script>
+  <script type="application/javascript" src="src/drawables/background.js"></script>
+  <script type="application/javascript" src="src/drawables/bullet.js"></script>
+
+  <script type="application/javascript" src="src/collision-system/quad-tree.js"></script>
+  <script type="application/javascript" src="src/collision-system/drawable-pool.js"></script>
+
+  <script type="application/javascript" src="src/drawables/ship.js"></script>
+  <script type="application/javascript" src="src/drawables/enemy.js"></script>
+  <script type="application/javascript" src="src/enemy-logic/enemies-fire-logic.js"></script>
+
+  <script type="application/javascript" src="src/assets/sound-pool.js"></script>
+
+  <script type="application/javascript" src="src/consts.js"></script>
+  <script type="application/javascript" src="src/main.js"></script>
+
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+</head>
+<body>
+
+<header>
+
+</header>
+
+<div id="Menu">
+</div>
+
+<div id="Content" class="container">
+  <!--<div id="Welcome" class="row">-->
+    <!--<h1>Spaceships!</h1>-->
+  <!--</div>-->
+  <!--<div id="Signup" class="row">-->
+    <!--<form>-->
+      <!--<input type="email" class="col-md-6">-->
+      <!--<input type="password" class="col-md-6">-->
+    <!--</form>-->
+  <!--</div>-->
+  <!--<div id="Login"></div>-->
+  <div id="Game">
+    <!-- The canvas for the panning background -->
+    <canvas id="background" width="600" height="360">
+      Your browser does not support canvas. Please try again with a different browser.
+    </canvas>
+    <!-- The canvas for all enemy ships and bullets -->
+    <canvas id="main" width="600" height="360">
+    </canvas>
+    <!-- The canvas the ship uses (can only move up
+         one forth the screen. -->
+    <canvas id="ship" width="600" height="360">
+    </canvas>
+    <div class="game-state">SCORE: <span id="score"></span> LIVES: <span id="lives"></span></div>
+    <div class="game-over" id="game-over">GAME OVER<p><span onclick="game.restart()">Restart</span></p></div>
+    <div class="loading" id="loading">LOADING...<p>Please wait</p></div>
+  </div>
+</div>
+
+<footer>
+</footer>
+
+</body>
 </html>
