@@ -8,6 +8,7 @@
   <script type="application/javascript" src="src/drawables/drawable.js"></script>
   <script type="application/javascript" src="src/drawables/background.js"></script>
   <script type="application/javascript" src="src/drawables/bullet.js"></script>
+  <script type="application/javascript" src="src/drawables/special-ability.js"></script>
 
   <script type="application/javascript" src="src/collision-system/quad-tree.js"></script>
   <script type="application/javascript" src="src/collision-system/drawable-pool.js"></script>
@@ -56,7 +57,10 @@
          one forth the screen. -->
     <canvas id="ship" width="600" height="360">
     </canvas>
-    <div class="game-state">SCORE: <span id="score"></span> LIVES: <span id="lives"></span></div>
+    <div class="game-state">SCORE: <span id="score"></span>
+                            LIVES: <span id="lives"></span>
+                            TIME: <span id="timer"></span>
+    </div>
     <div class="debug">ENEMY TOP SPEED: <span id="enemyTopSpeed"></span> ENEMY SPEED: <span id="enemySpeed"></span></div>
     <div class="game-over" id="game-over">GAME OVER<p><span onclick="game.restart()">Restart</span></p></div>
     <div class="loading" id="loading">LOADING...<p>Please wait</p></div>

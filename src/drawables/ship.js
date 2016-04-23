@@ -65,13 +65,18 @@ function Ship() {
     }
 
     if (this.isColliding) {
-      // Erase old position so it can
-      // be redrawn in it's new location
-      this.context.clearRect(this.x, this.y, this.width, this.height);
+      if (this.collidingWith.type === 'enemyBullet') {
+        // Erase old position so it can
+        // be redrawn in it's new location
+        this.context.clearRect(this.x, this.y, this.width, this.height);
 
-      this.x = this.initialX;
-      this.y = this.initialY;
-      this.decreaseLife();
+        this.x = this.initialX;
+        this.y = this.initialY;
+        this.decreaseLife();
+
+      } else if (this.collidingWith.type === 'specialAbility') {
+        this.increaseLife();
+      }
     }
 
     if (!this.alive) {
@@ -97,5 +102,10 @@ function Ship() {
     this.alive = this.lives > 0;
     this.isColliding = false;
   };
+
+  this.increaseLife = function () {
+    this.lives += 1;
+    this.isColliding = false;
+  }
 }
 Ship.prototype = new Drawable();

@@ -66,6 +66,14 @@ function Pool(maxSize) {
         bullet.type = "enemyBullet";
         pool[i] = bullet;
       }
+    } else if (object == "specialAbility") {
+      for (var i = 0; i < size; i++) {
+        var specialAbility = new SpecialAbility();
+        specialAbility.init(0, 0, imageRepository.specialAbility.width, imageRepository.specialAbility.height);
+        specialAbility.collidableWith = "ship";
+        specialAbility.type = "specialAbility";
+        pool[i] = specialAbility;
+      }
     }
   };
 
@@ -74,7 +82,7 @@ function Pool(maxSize) {
    * pushes it to the front of the array.
    */
   this.get = function(x, y, speed) {
-    if(!pool[size - 1].alive) {
+    if (!pool[size - 1].alive) {
       pool[size - 1].spawn(x, y, speed);
 
       var spawnedObject = pool.pop();

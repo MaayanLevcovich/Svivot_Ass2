@@ -42,15 +42,21 @@ function Game() {
       Enemy.prototype.canvasWidth = this.mainCanvas.width;
       Enemy.prototype.canvasHeight = this.mainCanvas.height;
 
+      SpecialAbility.prototype.context = this.mainContext;
+      SpecialAbility.prototype.canvasWidth = this.mainCanvas.width;
+      SpecialAbility.prototype.canvasHeight = this.mainCanvas.height;
+
       // Initialize the background object
       this.background = new Background();
       this.background.init(0,0); // Set draw point to 0,0
 
       // Initialize the ship object
       this.ship = new Ship();
+      
       // Set the ship to start near the bottom middle of the canvas
       this.shipStartX = this.shipCanvas.width/2 - imageRepository.spaceship.width;
       this.shipStartY = this.shipCanvas.height/4*3 + imageRepository.spaceship.height*2;
+      
       this.ship.init(this.shipStartX, this.shipStartY,
         imageRepository.spaceship.width, imageRepository.spaceship.height);
 
@@ -62,6 +68,11 @@ function Game() {
 
       this.enemyBulletPool = new Pool(2);
       this.enemyBulletPool.init("enemyBullet");
+      
+      this.specialAbilityPool = new Pool(1);
+      this.specialAbilityPool.init("specialAbility");
+
+      this.specialAbilityHandle = setInterval(this.dropSpecialAbility, 5000);
 
       // Start QuadTree
       this.quadTree = new QuadTree({x:0,y:0,width:this.mainCanvas.width,height:this.mainCanvas.height});
@@ -81,6 +92,18 @@ function Game() {
       this.backgroundAudio.load();
 
       this.checkAudio = window.setInterval(function(){checkReadyState()},1000);
+      this.time = INITIAL_TIME;
+
+      var self = this;
+      var timerDiv = document.getElementById('timer');
+      this.timer = window.setInterval(function () {
+        timerDiv.innerHTML = self.time;
+        self.time -= 1;
+
+        if (self.time < 0) {
+          self.gameOver();
+        }
+      }, 1000)
     }
   };
 
@@ -116,6 +139,14 @@ function Game() {
     }
   };
 
+  var self = this;
+  this.dropSpecialAbility = function () {
+    var y = 0;
+    var x = Math.floor(Math.random() * (self.mainCanvas.width + 1));
+    var speed = -2.5;
+    self.specialAbilityPool.get(x, y, speed);
+  };
+
   // Start the animation loop
   this.start = function() {
     this.ship.draw();
@@ -139,6 +170,9 @@ function Game() {
     this.enemyPool.init("enemy");
     this.spawnWave();
     this.enemyBulletPool.init("enemyBullet");
+    this.specialAbilityPool.init("specialAbility");
+
+    this.specialAbilityHandle = setInterval(this.dropSpecialAbility, 5000);
 
     this.playerScore = 0;
     this.ship.lives = PLAYER_LIVES;
@@ -152,6 +186,19 @@ function Game() {
   // Game over
   this.gameOver = function() {
     this.backgroundAudio.pause();
+    clearInterval(this.specialAbilityHandle);
+    clearInterval(this.timer);
+
     document.getElementById('game-over').style.display = "block";
+
+    if (this.ship.lives == 0 ){
+      // you lost
+    } else if (this.playerScore < 100) {
+      // you can do better
+    } else if (this.playerScore < 250) {
+      // winner
+    } else if (this.playerScore >= 250) {
+      // champion
+    }
   };
 }

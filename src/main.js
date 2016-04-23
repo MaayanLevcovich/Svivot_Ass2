@@ -36,14 +36,14 @@ function animate() {
     document.getElementById('enemyTopSpeed').innerHTML = enemy.topSpeed;
     document.getElementById('enemySpeed').innerHTML = enemy.speed;
   }
-
-
+  
   // Insert objects into quadtree
   game.quadTree.clear();
   game.quadTree.insert(game.ship);
   game.quadTree.insert(game.ship.bulletPool.getPool());
   game.quadTree.insert(game.enemyPool.getPool());
   game.quadTree.insert(game.enemyBulletPool.getPool());
+  game.quadTree.insert(game.specialAbilityPool.getPool());
 
   detectCollision();
 
@@ -53,7 +53,7 @@ function animate() {
   }
 
   // Animate game objects
-  if (game.ship.alive && game.enemyPool.getPool().length !== 0) {
+  if (game.ship.alive && game.enemyPool.getPool().length !== 0 && game.time >= 0) {
     requestAnimFrame( animate );
 
     game.enemyFireLogic.randomEnemyShoot();
@@ -61,6 +61,7 @@ function animate() {
     game.background.draw();
     game.ship.move();
     game.ship.bulletPool.animate();
+    game.specialAbilityPool.animate();
     game.enemyPool.animate();
     game.enemyBulletPool.animate();
   }
@@ -82,7 +83,9 @@ function detectCollision() {
         objects[x].y < obj[y].y + obj[y].height &&
         objects[x].y + objects[x].height > obj[y].y)) {
         objects[x].isColliding = true;
+        objects[x].collidingWith = obj[y];
         obj[y].isColliding = true;
+        obj[y].collidingWith = objects[x];
       }
     }
   }
@@ -111,7 +114,7 @@ document.onkeydown = function(e) {
     e.preventDefault();
     KEY_STATUS[KEY_CODES[keyCode]] = true;
   }
-}
+};
 /**
  * Sets up the document to listen to ownkeyup events (fired when
  * any key on the keyboard is released). When a key is released,
@@ -124,7 +127,7 @@ document.onkeyup = function(e) {
     e.preventDefault();
     KEY_STATUS[KEY_CODES[keyCode]] = false;
   }
-}
+};
 
 /**
  * requestAnim shim layer by Paul Irish

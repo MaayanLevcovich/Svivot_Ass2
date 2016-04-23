@@ -10,9 +10,10 @@ function ImageRepository() {
   this.bullet = new Image();
   this.enemy = new Image();
   this.enemyBullet = new Image();
+  this.specialAbility = new Image();
 
   // Ensure all images have loaded before starting the game
-  var numImages = 5;
+  var numImages = 6;
   var numLoaded = 0;
   
   function imageLoaded() {
@@ -25,7 +26,6 @@ function ImageRepository() {
   this.background.onload = function() {
     imageLoaded();
   }
-  
   this.spaceship.onload = function() {
     imageLoaded();
   }
@@ -38,6 +38,9 @@ function ImageRepository() {
   this.enemyBullet.onload = function() {
     imageLoaded();
   }
+  this.specialAbility.onload = function() {
+    imageLoaded();
+  }
 
   // Set images src
   this.background.src = "src/assets/imgs/bg.png";
@@ -45,4 +48,5 @@ function ImageRepository() {
   this.bullet.src = "src/assets/imgs/bullet.png";
   this.enemy.src = "src/assets/imgs/enemy.png";
   this.enemyBullet.src = "src/assets/imgs/bullet_enemy.png";
+  this.specialAbility.src = "src/assets/imgs/heart.png";
 }
